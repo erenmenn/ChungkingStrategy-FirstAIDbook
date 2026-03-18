@@ -152,21 +152,31 @@ Membagi dokumen berdasarkan **kemiripan makna** antar kalimat menggunakan embedd
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 🔬 Pipeline Evaluasi
+### 🔬 Pipeline Evaluasi & Ground Truth
 
-```
-Chunk → Embed → Retrieve → Generate → Evaluasi dengan BERTScore
-                                            │
-                                   ┌────────▼─────────┐
-                                   │  Precision        │
-                                   │  Recall           │
-                                   │  F1 Score         │
-                                   └──────────────────-┘
+Evaluasi pada penelitian ini tidak hanya melihat hasil ekstraksi secara mentah, tetapi menggunakan metode perbandingan dengan **Ground Truth** (jawaban ideal/referensi).
+
+```text
+Pertanyaan (Q) → Retrieve Chunk → Generate Jawaban
+                                         │
+                                         ▼
+[Jawaban RAG] ────────(IndoBERT)──────▶ [Ground Truth]
+                                         │
+                                ┌────────▼─────────┐
+                                │ Uji Kesamaan     │
+                                │ Vektor           │
+                                │ (BERTScore)      │
+                                └──────────────────┘
 ```
 
-**Model yang digunakan:**
-- 🤗 `bert-base-multilingual-cased` — untuk embedding dan BERTScore
-- 📦 Sentence Transformers — untuk semantic chunking
+Tahapan evaluasi kesamaan vektor:
+1. **Dataset Ground Truth**: Disiapkan sekumpulan pertanyaan dan jawaban ideal (Ground Truth) yang secara manual divalidasi kebenarannya langsung dari buku panduan pertolongan pertama.
+2. **Ekstraksi Sistem RAG**: Sistem mencari chunk yang relevan berdasarkan pertanyaan, kemudian men-*generate* jawaban secara otomatis.
+3. **Uji Akurasi Vektor (IndoBERT)**: Jawaban hasil RAG kemudian diukur tingkat kesamaan semantik dan akurasinya terhadap **Ground Truth** menggunakan metrik *BERTScore*. Proses ini mengandalkan model **IndoBERT** (`bert-base-multilingual-cased`) sebagai penilai untuk memastikan substansi pertolongan pertamanya tetap selaras, akurat, dan tidak mengalami halusinasi.
+
+**Model & Referensi Utama:**
+- 🤗 `bert-base-multilingual-cased` (Multilingual/IndoBERT) — untuk evaluasi kesamaan vektor (BERTScore) dan embedding dasar.
+- 📦 Sentence Transformers — untuk memproses *semantic chunking*.
 - 📄 Sumber: *Buku Panduan Pertolongan Pertama* (dokumen PDF)
 
 ---
