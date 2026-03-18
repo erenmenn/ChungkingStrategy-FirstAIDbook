@@ -1,0 +1,41 @@
+# ============================================
+# .gitignore — KTI Chunking Strategy
+# Hanya upload: README.md, pertolongan.pdf,
+# asset/, EmirsyahRafsanjani_ProgressKTI.pdf
+# ============================================
+
+# Exclude notebooks (terlalu besar & banyak output)
+*.ipynb
+
+# Exclude semua Word documents
+*.docx
+
+# Exclude gambar yang tidak perlu
+*.jpg
+*.jpeg
+*.webp
+download.png
+fontlogo.webp
+
+# Exclude folder Dafpus (referensi internal)
+Dafpus/
+
+# Exclude file progress duplikat
+ProgressKTI.docx
+ProgressKTI2.docx
+
+# Python & cache
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+venv/
+.venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# VS Code
+.vscode/
